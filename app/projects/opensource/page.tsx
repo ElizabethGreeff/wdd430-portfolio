@@ -1,15 +1,8 @@
 import ProjectCard from "@/components/ProjectCard";
+import { getProjects } from "@/lib/projects-db";
 
-async function getOpenSourceProjects() {
-    const res = await fetch("http://localhost:3000/api/projects?type=opensource", {
-        cache: "no-store",
-    });
-    if (!res.ok) throw new Error("Failed to fetch open source projects");
-    return res.json();
-}
-
-export default async function OpenSourcePage() {
-    const projects = await getOpenSourceProjects();
+export default function OpenSourcePage() {
+    const projects = getProjects("opensource");
 
     return (
         <div>
@@ -19,7 +12,7 @@ export default async function OpenSourcePage() {
             </p>
 
             <div className="grid gap-6 md:grid-cols-2">
-                {projects.map((project: any) => (
+                {projects.map((project) => (
                     <ProjectCard
                         key={project.id}
                         title={project.title}

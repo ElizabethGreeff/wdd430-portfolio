@@ -1,15 +1,8 @@
 import ProjectCard from "@/components/ProjectCard";
+import { getProjects } from "@/lib/projects-db";
 
-async function getProjects() {
-    const res = await fetch("http://localhost:3000/api/projects", {
-        cache: "no-store",
-    });
-    if (!res.ok) throw new Error("Failed to fetch projects");
-    return res.json();
-}
-
-export default async function ProjectsPage() {
-    const projects = await getProjects();
+export default function ProjectsPage() {
+    const projects = getProjects();
 
     return (
         <div>
@@ -19,7 +12,7 @@ export default async function ProjectsPage() {
             </p>
 
             <div className="grid gap-6 md:grid-cols-2">
-                {projects.map((project: any) => (
+                {projects.map((project) => (
                     <ProjectCard
                         key={project.id}
                         title={project.title}

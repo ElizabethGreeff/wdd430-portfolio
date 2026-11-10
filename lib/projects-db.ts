@@ -1,53 +1,31 @@
 // lib/projects-db.ts
 
+import { sql } from '@vercel/postgres';
+
 export interface Project {
     id: number;
     title: string;
     description: string;
-    type: "opensource" | "school";
+    type: 'opensource' | 'school';
     technologies: string[];
     link?: string;
 }
 
-export const projects: Project[] = [
-    {
-        id: 1,
-        title: "My First Open Source Contribution",
-        description: "A bug fix contributed to a popular library.",
-        type: "opensource",
-        technologies: ["TypeScript", "React"],
-        link: "https://github.com/example/repo",
-    },
-    {
-        id: 2,
-        title: "Database Design Final Project",
-        description: "An ER diagram and normalized schema for a library system.",
-        type: "school",
-        technologies: ["PostgreSQL", "SQL"],
-    },
-    {
-        id: 3,
-        title: "Portfolio Website",
-        description: "Personal portfolio built with Next.js and Tailwind CSS.",
-        type: "school",
-        technologies: ["Next.js", "TypeScript", "Tailwind CSS"],
-    },
-    {
-        id: 4,
-        title: "Accessibility Improvements PR",
-        description: "Improved keyboard navigation and ARIA labels in an open-source component library.",
-        type: "opensource",
-        technologies: ["React", "Accessibility"],
-    },
-];
-
-export function getProjects(type?: string | null): Project[] {
-    if (type === "opensource" || type === "school") {
-        return projects.filter((p) => p.type === type);
+export async function getProjects(type?: string | null): Promise<Project[]> {
+    "use cache";
+    if (type) {
+        const { rows } = await sql<Project>`
+      SELECT * FROM projects WHERE type = ${type} ORDER BY id
+    `;
+        return rows;
     }
-    return projects;
+    const { rows } = await sql<Project>`SELECT * FROM projects ORDER BY id`;
+    return rows;
 }
 
-export function getProjectById(id: number): Project | null {
-    return projects.find((p) => p.id === id) ?? null;
+export async function getProjectById(id: number): Promise<Project | null> {
+    const { rows } = await sql<Project>`
+    SELECT * FROM projects WHERE id = ${id}
+  `;
+    return rows[0] ?? null;
 }

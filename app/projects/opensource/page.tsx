@@ -1,8 +1,8 @@
 import ProjectCard from "@/components/ProjectCard";
 import { getProjects } from "@/lib/projects-db";
 
-export default function OpenSourcePage() {
-    const projects = getProjects("opensource");
+export default async function OpenSourcePage() {
+    const projects = await getProjects("opensource");
 
     return (
         <div>

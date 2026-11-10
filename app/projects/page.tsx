@@ -1,8 +1,8 @@
 import ProjectCard from "@/components/ProjectCard";
 import { getProjects } from "@/lib/projects-db";
 
-export default function ProjectsPage() {
-    const projects = getProjects();
+export default async function ProjectsPage() {
+    const projects = await getProjects();
 
     return (
         <div>

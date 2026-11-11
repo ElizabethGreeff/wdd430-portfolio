@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import ProjectCard from "@/components/ProjectCard";
 import { getProjects } from "@/lib/projects-db";
 
-async function ProjectsGrid() {
+async function SchoolProjectList() {
     const projects = await getProjects("school");
 
     return (
@@ -20,6 +20,19 @@ async function ProjectsGrid() {
     );
 }
 
+function ProjectCardSkeleton() {
+    return (
+        <div className="grid gap-6 md:grid-cols-2 animate-pulse">
+            {[1, 2].map((i) => (
+                <div
+                    key={i}
+                    className="h-48 rounded-xl border border-[#f0d5d9] bg-[#f5e6e8]"
+                />
+            ))}
+        </div>
+    );
+}
+
 export default function SchoolPage() {
     return (
         <div>
@@ -28,8 +41,9 @@ export default function SchoolPage() {
                 Projects completed as part of my coursework.
             </p>
 
-            <Suspense fallback={<p className="text-[#6b4f52]">Loading projects...</p>}>
-                <ProjectsGrid />
+            {/* Heading and intro render immediately; the list streams in when ready */}
+            <Suspense fallback={<ProjectCardSkeleton />}>
+                <SchoolProjectList />
             </Suspense>
         </div>
     );

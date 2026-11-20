@@ -9,6 +9,7 @@ export interface Project {
     type: 'opensource' | 'school';
     technologies: string[];
     link?: string;
+    year_completed?: number | null;
 }
 
 export async function getProjects(type?: string | null): Promise<Project[]> {

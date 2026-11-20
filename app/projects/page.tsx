@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import Link from "next/link";
 import ProjectCard from "@/components/ProjectCard";
 import ProjectSearch from "@/components/ProjectSearch";
 import Pagination from "@/components/Pagination";
@@ -30,6 +31,7 @@ async function ProjectsResults({ searchParams }: { searchParams: SearchParams })
                 {projects.map((project) => (
                     <ProjectCard
                         key={project.id}
+                        id={project.id}
                         title={project.title}
                         description={project.description}
                         technologies={project.technologies}
@@ -46,9 +48,16 @@ export default function ProjectsPage(props: { searchParams: SearchParams }) {
     return (
         <div>
             <h1 className="text-3xl font-bold text-[#3d2c2e] mb-6">Projects Overview</h1>
-            <p className="text-[#6b4f52] mb-6">
+            <p className="text-[#6b4f52] mb-4">
                 All projects (open source + school).
             </p>
+
+            <Link
+                href="/projects/create"
+                className="mb-6 inline-block px-4 py-2 rounded-full text-sm font-medium bg-[#e8a0a8] text-white hover:bg-[#d48992] transition-colors"
+            >
+                + Add project
+            </Link>
 
             <div className="mb-8">
                 <Suspense fallback={<div className="h-10 rounded-full bg-[#f5e6e8]" />}>

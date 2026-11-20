@@ -46,9 +46,9 @@ export default function Home() {
           Welcome to My Portfolio
         </h2>
         <p className="text-[#6b4f52] leading-relaxed">
-          Hello! I'm Elizabeth Greeff, a web developer passionate about
+          Hello! I&apos;m Elizabeth Greeff, a web developer passionate about
           creating engaging and user-friendly web applications. Below are some
-          of the projects I've created.
+          of the projects I&apos;ve created.
         </p>
       </section>
       <section>

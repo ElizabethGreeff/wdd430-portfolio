@@ -1,4 +1,8 @@
+import Link from "next/link";
+import { deleteProject } from "@/app/lib/actions";
+
 interface ProjectCardProps {
+    id?: number;
     title: string;
     description: string;
     technologies: string[];
@@ -6,6 +10,7 @@ interface ProjectCardProps {
 }
 
 export default function ProjectCard({
+    id,
     title,
     description,
     technologies,
@@ -34,6 +39,27 @@ export default function ProjectCard({
                 >
                     View Project
                 </a>
+            )}
+
+            {id !== undefined && (
+                <div className="mt-4 flex items-center gap-3 border-t border-[#f0d5d9] pt-4">
+                    <Link
+                        href={`/projects/${id}/edit`}
+                        aria-label={`Edit ${title}`}
+                        className="px-4 py-2 rounded-full text-sm font-medium border border-[#f0d5d9] text-[#3d2c2e] hover:bg-[#f5e6e8] transition-colors"
+                    >
+                        Edit
+                    </Link>
+                    <form action={deleteProject.bind(null, id)}>
+                        <button
+                            type="submit"
+                            aria-label={`Delete ${title}`}
+                            className="px-4 py-2 rounded-full text-sm font-medium border border-red-200 text-red-700 hover:bg-red-50 transition-colors"
+                        >
+                            Delete
+                        </button>
+                    </form>
+                </div>
             )}
         </article>
     );

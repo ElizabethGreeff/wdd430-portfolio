@@ -1,3 +1,7 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { title: "Contact" };
+
 export default function ContactPage() {
     return (
         <main className="max-w-3xl mx-auto px-6 py-12">

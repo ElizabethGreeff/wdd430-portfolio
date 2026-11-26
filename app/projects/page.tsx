@@ -3,6 +3,9 @@ import ProjectCard from "@/components/ProjectCard";
 import ProjectSearch from "@/components/ProjectSearch";
 import Pagination from "@/components/Pagination";
 import { fetchFilteredProjects, fetchProjectsPages } from "@/lib/projects-db";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { title: "Projects", description: "All of my open source and school projects." };
 
 type SearchParams = Promise<{ query?: string; page?: string }>;
 

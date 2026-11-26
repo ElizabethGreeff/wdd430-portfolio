@@ -1,6 +1,9 @@
 import { Suspense } from "react";
 import ProjectCard from "@/components/ProjectCard";
 import { getProjects } from "@/lib/projects-db";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { title: "School Projects" };
 
 async function SchoolProjectList() {
     const projects = await getProjects("school");

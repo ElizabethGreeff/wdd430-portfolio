@@ -23,7 +23,7 @@ export function LoginForm() {
                 </label>
                 <input
                     id="password" type="password" name="password"
-                    minLength={6} required className={inputClass}
+                    minLength={5} required className={inputClass}
                 />
             </div>
             <button

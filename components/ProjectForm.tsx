@@ -124,7 +124,7 @@ export default function ProjectForm({ action, project, submitLabel }: ProjectFor
                 >
                     {isPending ? 'Saving...' : submitLabel}
                 </button>
-                <Link href="/projects" className="text-sm text-[#3d2c2e] underline">
+                <Link href="/dashboard/projects" className="text-sm text-[#3d2c2e] underline">
                     Cancel
                 </Link>
             </div>

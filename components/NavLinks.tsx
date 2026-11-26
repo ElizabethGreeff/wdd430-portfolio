@@ -8,6 +8,7 @@ const links = [
     { href: "/about", label: "About" },
     { href: "/projects", label: "Projects" },
     { href: "/contact", label: "Contact" },
+    { href: "/dashboard/projects", label: "Dashboard" },
 ];
 
 export default function NavLinks() {

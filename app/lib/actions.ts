@@ -4,6 +4,8 @@ import { z } from 'zod';
 import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import { AuthError } from 'next-auth';
+import { auth, signIn } from '@/auth';
 
 export type State = {
     errors?: {
@@ -16,6 +18,36 @@ export type State = {
     message?: string | null;
     values?: Record<string, string>;
 };
+
+//Auth 
+
+async function requireOwnerSession() {
+    const session = await auth();
+    if (!session?.user) throw new Error('Not authenticated');
+    return session;
+}
+
+export async function authenticate(
+    prevState: string | undefined,
+    formData: FormData
+) {
+    try {
+        formData.set('redirectTo', '/dashboard/projects');
+        await signIn('credentials', formData);
+    } catch (error) {
+        if (error instanceof AuthError) {
+            switch (error.type) {
+                case 'CredentialsSignin':
+                    return 'Invalid email or password.';
+                default:
+                    return 'Something went wrong.';
+            }
+        }
+        throw error; 
+    }
+}
+
+//Validation helpers 
 
 function buildSchema() {
     const currentYear = new Date().getFullYear();
@@ -69,7 +101,16 @@ function splitTechnologies(value: string): string[] {
     return value.split(',').map((t) => t.trim()).filter(Boolean);
 }
 
+function refreshProjectPages() {
+    revalidatePath('/projects');
+    revalidatePath('/dashboard/projects');
+}
+
+//Project mutations (owner only)
+
 export async function createProject(_prevState: State, formData: FormData): Promise<State> {
+    await requireOwnerSession();
+
     const result = validateForm(formData);
     if (!result.ok) return result.state;
 
@@ -90,8 +131,8 @@ export async function createProject(_prevState: State, formData: FormData): Prom
         return { message: 'Database Error: Failed to create project.' };
     }
 
-    revalidatePath('/projects');
-    redirect('/projects');
+    refreshProjectPages();
+    redirect('/dashboard/projects');
 }
 
 export async function updateProject(
@@ -99,6 +140,8 @@ export async function updateProject(
     _prevState: State,
     formData: FormData
 ): Promise<State> {
+    await requireOwnerSession();
+
     const result = validateForm(formData);
     if (!result.ok) return result.state;
 
@@ -120,16 +163,18 @@ export async function updateProject(
         return { message: 'Database Error: Failed to update project.' };
     }
 
-    revalidatePath('/projects');
-    redirect('/projects');
+    refreshProjectPages();
+    redirect('/dashboard/projects');
 }
 
 export async function deleteProject(id: number): Promise<void> {
+    await requireOwnerSession();
+
     try {
         await sql`DELETE FROM projects WHERE id = ${id}`;
     } catch (error) {
         console.error('Error deleting project:', error);
         throw new Error('Failed to delete project. Please try again later.');
     }
-    revalidatePath('/projects');
+    refreshProjectPages();
 }

@@ -1,8 +1,11 @@
 import { Suspense } from "react";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import ProjectForm from "@/components/ProjectForm";
 import { updateProject } from "@/app/lib/actions";
 import { getProjectById } from "@/lib/projects-db";
+
+export const metadata: Metadata = { title: "Edit Project", robots: { index: false } };
 
 async function EditProjectForm({ params }: { params: Promise<{ id: string }> }) {
     const { id: idParam } = await params;
